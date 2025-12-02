@@ -54,7 +54,9 @@ for idx, prof in enumerate(professors):
     with cols[idx % 3]:
         with st.container(border=True):
             if prof.image_url:
-                st.image(prof.image_url, width=150)
+                # Normalize path for cross-platform compatibility (Windows backslashes to forward slashes)
+                image_path = prof.image_url.replace("\\", "/")
+                st.image(image_path, width=150)
             st.subheader(prof.name)
             st.caption(prof.title)
             st.write(f"**Dept:** {prof.department}")
