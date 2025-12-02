@@ -21,12 +21,18 @@ def analyze_bio_for_industries(bio_text):
 
     genai.configure(api_key=api_key)
     # Use a currently supported model
-    model = genai.GenerativeModel('gemini-flash-latest')
+    model = genai.GenerativeModel('gemini-1.5-flash')
 
     prompt = f"""
     Analyze the following academic biography and identify:
-    1. The key industries the person is involved in (high-level, e.g., "Technology", "Healthcare").
-    2. The specific sectors or sub-industries (more granular, e.g., "SaaS", "Semiconductors", "Biotech").
+    1. The key industries the person is involved in (high-level, e.g., "Technology", "Healthcare"). Limit to the top 1-3 most relevant.
+    2. The specific sectors or sub-industries (more granular, e.g., "SaaS", "Semiconductors", "Biotech"). Limit to the top 3-5 most relevant.
+
+    CRITICAL INSTRUCTIONS:
+    - Be CONSERVATIVE. Only include industries/sectors that are EXPLICITLY mentioned or STRONGLY implied by their research/work.
+    - Do NOT include broad terms if a specific one applies (e.g., use "Fintech" instead of just "Finance" if applicable, but don't list every possible sub-sector).
+    - Do NOT infer sectors based on loose associations. If they just mention a company name once, that doesn't mean they specialize in that company's sector.
+    - Focus on their AREA OF EXPERTISE, not just who they worked with.
 
     Return ONLY a JSON object with two keys: "industries" (list of strings) and "sectors" (list of strings).
     Example: {{"industries": ["Technology", "Finance"], "sectors": ["Fintech", "Blockchain", "SaaS"]}}
@@ -37,32 +43,38 @@ def analyze_bio_for_industries(bio_text):
     """
     # Truncate bio to avoid token limits if necessary
 
-    try:
-        response = model.generate_content(prompt)
-        text = response.text.strip()
-        # Clean up potential markdown formatting
-        if text.startswith("```json"):
-            text = text[7:-3]
-        elif text.startswith("```"):
-            text = text[3:-3]
+    for attempt in range(3):
+        try:
+            response = model.generate_content(prompt, request_options={'timeout': 30})
+            text = response.text.strip()
+            # Clean up potential markdown formatting
+            if text.startswith("```json"):
+                text = text[7:-3]
+            elif text.startswith("```"):
+                text = text[3:-3]
+                
+            result = json.loads(text)
             
-        result = json.loads(text)
-        
-        # Ensure structure
-        if not isinstance(result, dict):
-             result = {"industries": ["General Management"], "sectors": []}
-             
-        if "industries" not in result or not result["industries"]:
-             result["industries"] = ["General Management"]
-             
-        if "sectors" not in result:
-             result["sectors"] = []
-             
-        return result
+            # Ensure structure
+            if not isinstance(result, dict):
+                 result = {"industries": ["General Management"], "sectors": []}
+                 
+            if "industries" not in result or not result["industries"]:
+                 result["industries"] = ["General Management"]
+                 
+            if "sectors" not in result:
+                 result["sectors"] = []
+                 
+            return result
             
-    except Exception as e:
-        logging.error(f"Error calling LLM: {e}")
-        return {"industries": ["General Management"], "sectors": []}
+        except Exception as e:
+            logging.warning(f"Attempt {attempt+1} failed for LLM analysis: {e}")
+            if attempt < 2:
+                import time
+                time.sleep(2)
+            else:
+                logging.error(f"All attempts failed for LLM analysis. Returning default.")
+                return {"industries": ["General Management"], "sectors": []}
 
 if __name__ == "__main__":
     # Test

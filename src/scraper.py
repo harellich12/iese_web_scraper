@@ -3,6 +3,10 @@ from bs4 import BeautifulSoup
 import time
 import logging
 import sys
+import os
+from PIL import Image
+from io import BytesIO
+import re
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -20,6 +24,46 @@ def get_soup(url):
         return BeautifulSoup(response.content, 'html.parser')
     except Exception as e:
         logging.error(f"Error fetching {url}: {e}")
+        return None
+
+def process_image(image_url, professor_name):
+    """Downloads, crops, and saves the image locally."""
+    try:
+        response = requests.get(image_url, timeout=10)
+        response.raise_for_status()
+        
+        img = Image.open(BytesIO(response.content))
+        
+        # Crop: 400x300 starting at x=800
+        # Box is (left, upper, right, lower)
+        # x=800 to x=1200 (width 400)
+        # y=0 to y=300 (height 300)
+        crop_box = (800, 0, 1200, 300)
+        
+        # Ensure image is large enough, otherwise resize or pad?
+        # For now, we'll just try to crop. If image is smaller, PIL might complain or return smaller.
+        # Let's just crop.
+        cropped_img = img.crop(crop_box)
+        
+        # Create directory
+        save_dir = "data/images"
+        os.makedirs(save_dir, exist_ok=True)
+        
+        # Safe filename
+        safe_name = re.sub(r'[^a-zA-Z0-9]', '_', professor_name)
+        filename = f"{safe_name}.jpg"
+        file_path = os.path.join(save_dir, filename)
+        
+        # Convert to RGB if necessary (e.g. if PNG with alpha)
+        if cropped_img.mode in ("RGBA", "P"):
+            cropped_img = cropped_img.convert("RGB")
+            
+        cropped_img.save(file_path, "JPEG", quality=85)
+        
+        return file_path
+        
+    except Exception as e:
+        logging.error(f"Error processing image for {professor_name}: {e}")
         return None
 
 def get_all_professor_urls(limit=None):
@@ -163,11 +207,29 @@ def scrape_professor_details(url):
                 data["bio"] = "\n".join([p.get_text(strip=True) for p in paras])
 
         # Image
-        img_tag = soup.select_one(".post-thumbnail img")
-        if img_tag:
-            data["image_url"] = img_tag.get('src')
+        # Strategy 1: Check for jumbotron background image (lazy loaded)
+        jumbotron = soup.select_one(".jumbotron")
+        if jumbotron and jumbotron.get('data-bg-image'):
+            bg_image = jumbotron.get('data-bg-image')
+            # Format is usually: url(https://...)
+            if "url(" in bg_image:
+                data["image_url"] = bg_image.split("url(")[1].split(")")[0]
+            else:
+                data["image_url"] = bg_image
+
+        # Strategy 2: Fallback to standard image tag
+        if not data["image_url"]:
+            img_tag = soup.select_one(".post-thumbnail img")
+            if img_tag:
+                data["image_url"] = img_tag.get('src')
+        
+        # Process Image (Download & Crop)
+        if data["image_url"]:
+            local_path = process_image(data["image_url"], data["name"])
+            if local_path:
+                data["image_url"] = local_path
             
-        logging.info(f"Extracted: Name={data['name']}, Title={data['title']}, Dept={data['department']}, BioLen={len(data['bio'])}")
+        logging.info(f"Extracted: Name={data['name']}, Title={data['title']}, Dept={data['department']}, BioLen={len(data['bio'])}, ImageURL={data['image_url']}")
 
     except Exception as e:
         logging.error(f"Error parsing profile {url}: {e}")
@@ -187,7 +249,14 @@ def save_professor(data):
         # Check if exists
         existing = session.query(Professor).filter_by(url=data['url']).first()
         if existing:
-            logging.info(f"Professor already exists: {data['name']}")
+            # Update image if we have a new one and (it's missing OR it's a remote URL and we have a local one)
+            # Actually, just update if we have a valid new image.
+            if data['image_url'] and existing.image_url != data['image_url']:
+                existing.image_url = data['image_url']
+                session.commit()
+                logging.info(f"Updated image for: {data['name']}")
+            else:
+                logging.info(f"Professor already exists: {data['name']}")
             return
 
         prof = Professor(
@@ -255,3 +324,4 @@ if __name__ == "__main__":
             
     print("Scraping complete.", flush=True)
     time.sleep(2) # Ensure the process doesn't exit before the agent captures the output
+    sys.exit(0)
