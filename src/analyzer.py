@@ -21,7 +21,7 @@ def analyze_bio_for_industries(bio_text):
 
     genai.configure(api_key=api_key)
     # Use a currently supported model
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-2.0-flash')
 
     prompt = f"""
     Analyze the following academic biography and identify:
@@ -68,6 +68,10 @@ def analyze_bio_for_industries(bio_text):
             return result
             
         except Exception as e:
+            if "404" in str(e) and "not found" in str(e):
+                logging.error(f"Model not found (404): {e}. Stopping retries.")
+                return {"industries": ["General Management"], "sectors": []}
+                
             logging.warning(f"Attempt {attempt+1} failed for LLM analysis: {e}")
             if attempt < 2:
                 import time

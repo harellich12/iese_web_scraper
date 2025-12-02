@@ -149,41 +149,88 @@ def scrape_professor_details(url):
         # Name - Try multiple strategies
         name_tag = soup.select_one("h1.entry-title")
         if name_tag:
-            # Get text, but be careful of spans. 
-            # Often the name is split across text nodes and spans.
-            # "Mario" <span>Capizzani</span>
             data["name"] = name_tag.get_text(" ", strip=True)
         
+        # Fallback Name: Breadcrumb
+        if data["name"] == "Unknown":
+            breadcrumb = soup.select_one(".breadcrumb__item.item-current")
+            if breadcrumb:
+                data["name"] = breadcrumb.get_text(strip=True)
+
+        # Fallback Name: Meta Title
+        if data["name"] == "Unknown":
+            meta_title = soup.select_one('meta[property="og:title"]')
+            if meta_title:
+                data["name"] = meta_title.get("content", "Unknown")
+
         if data["name"] == "Unknown" and soup.title:
              data["name"] = soup.title.get_text(strip=True).split("|")[0].strip()
 
         # Title & Department
-        # The structure is often: <div class="faculty-data"> <h1>...</h1> TEXT <ul>...</ul> </div>
-        # We need the TEXT between h1 and ul.
-        faculty_data = soup.select_one(".faculty-data")
-        if faculty_data:
-            # Get all text from faculty_data
-            full_text = faculty_data.get_text(" ", strip=True)
-            # Remove the name (from h1) from this text to isolate title
-            if data["name"] in full_text:
-                remaining_text = full_text.replace(data["name"], "").strip()
-                # The remaining text might include the UL content (email, phone), so we need to be careful.
-                # Better approach: Iterate children
-                title_parts = []
-                for child in faculty_data.children:
-                    if child.name == 'h1': continue
-                    if child.name == 'ul': break # Stop at contact info
-                    if child.string and child.string.strip():
-                        title_parts.append(child.string.strip())
-                
-                if title_parts:
-                    data["title"] = " ".join(title_parts)
+        # Strategy 1: Look for "Professor ... in the X Department" in the bio/intro text
+        # Selector: .content.description-subHeader p
+        intro_div = soup.select_one(".content.description-subHeader p")
+        intro_text = ""
+        if intro_div:
+            intro_text = intro_div.get_text(" ", strip=True)
+        
+        # Also check the first paragraph of the bio if intro_div is empty
+        if not intro_text:
+            content_div = soup.select_one(".entry-content")
+            if content_div:
+                first_p = content_div.find('p')
+                if first_p:
+                    intro_text = first_p.get_text(" ", strip=True)
 
-            # Heuristic for Department
-            if " of " in data["title"]:
-                data["department"] = data["title"].split(" of ")[-1]
-            elif " in " in data["title"]:
-                data["department"] = data["title"].split(" in ")[-1]
+        if intro_text:
+            # Regex for department
+            # Pattern 1: "Professor ... in the X Department"
+            dept_match = re.search(r"Professor .*? in the (.+?) Department", intro_text, re.IGNORECASE)
+            if dept_match:
+                data["department"] = dept_match.group(1).strip()
+            
+            # Pattern 2: "Department of X"
+            if not data["department"]:
+                dept_match = re.search(r"Department of (.+?)(?:\.|,|$)", intro_text, re.IGNORECASE)
+                if dept_match:
+                    data["department"] = dept_match.group(1).strip()
+
+        # Strategy 2: Meta Description
+        if not data["department"]:
+            meta_desc = soup.select_one('meta[name="description"]')
+            if meta_desc:
+                desc_text = meta_desc.get("content", "")
+                # Pattern 1
+                dept_match = re.search(r"Professor .*? in the (.+?) Department", desc_text, re.IGNORECASE)
+                if dept_match:
+                    data["department"] = dept_match.group(1).strip()
+                # Pattern 2
+                if not data["department"]:
+                    dept_match = re.search(r"Department of (.+?)(?:\.|,|$)", desc_text, re.IGNORECASE)
+                    if dept_match:
+                        data["department"] = dept_match.group(1).strip()
+
+        # Strategy 3: Old Heuristic (Fallback)
+        if not data["department"]:
+            faculty_data = soup.select_one(".faculty-data")
+            if faculty_data:
+                full_text = faculty_data.get_text(" ", strip=True)
+                if data["name"] in full_text:
+                    remaining_text = full_text.replace(data["name"], "").strip()
+                    title_parts = []
+                    for child in faculty_data.children:
+                        if child.name == 'h1': continue
+                        if child.name == 'ul': break 
+                        if child.string and child.string.strip():
+                            title_parts.append(child.string.strip())
+                    
+                    if title_parts:
+                        data["title"] = " ".join(title_parts)
+
+                if " of " in data["title"]:
+                    data["department"] = data["title"].split(" of ")[-1]
+                elif " in " in data["title"]:
+                    data["department"] = data["title"].split(" in ")[-1]
 
         # Bio
         # Try multiple selectors for bio
@@ -249,12 +296,19 @@ def save_professor(data):
         # Check if exists
         existing = session.query(Professor).filter_by(url=data['url']).first()
         if existing:
-            # Update image if we have a new one and (it's missing OR it's a remote URL and we have a local one)
-            # Actually, just update if we have a valid new image.
+            # Update existing record if needed
+            updated = False
             if data['image_url'] and existing.image_url != data['image_url']:
                 existing.image_url = data['image_url']
+                updated = True
+            
+            if data['department'] and not existing.department:
+                existing.department = data['department']
+                updated = True
+                
+            if updated:
                 session.commit()
-                logging.info(f"Updated image for: {data['name']}")
+                logging.info(f"Updated details for: {data['name']}")
             else:
                 logging.info(f"Professor already exists: {data['name']}")
             return

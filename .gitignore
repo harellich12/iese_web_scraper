@@ -5,4 +5,11 @@ venv/
 .env
 .DS_Store
 .vscode/
-data/
+
+# Database
+*.db
+*.bak
+
+# Debug files
+debug_*.py
+debug_*.html

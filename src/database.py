@@ -54,7 +54,7 @@ class Sector(Base):
     def __repr__(self):
         return f"<Sector(name='{self.name}')>"
 
-def init_db(db_path='sqlite:///data/faculty.db'):
+def init_db(db_path='sqlite:///data/faculty_v2.db'):
     # Ensure directory exists if using sqlite file
     if db_path.startswith('sqlite:///'):
         import os
