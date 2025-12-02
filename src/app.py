@@ -54,17 +54,7 @@ for idx, prof in enumerate(professors):
     with cols[idx % 3]:
         with st.container(border=True):
             if prof.image_url:
-                # Normalize path
-                image_path = prof.image_url.replace("\\", "/")
-                
-                # Debugging
-                import os
-                if not os.path.exists(image_path):
-                    st.error(f"Image not found: {image_path} (Original: {prof.image_url})")
-                    st.write(f"CWD: {os.getcwd()}")
-                    st.write(f"Abs path: {os.path.abspath(image_path)}")
-                else:
-                    st.image(image_path, width=150)
+                st.image(prof.image_url, width=150)
             st.subheader(prof.name)
             st.caption(prof.title)
             st.write(f"**Dept:** {prof.department}")

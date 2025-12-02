@@ -52,7 +52,7 @@ def process_image(image_url, professor_name):
         # Safe filename
         safe_name = re.sub(r'[^a-zA-Z0-9]', '_', professor_name)
         filename = f"{safe_name}.jpg"
-        file_path = os.path.join(save_dir, filename)
+        file_path = os.path.join(save_dir, filename).replace("\\", "/")
         
         # Convert to RGB if necessary (e.g. if PNG with alpha)
         if cropped_img.mode in ("RGBA", "P"):
