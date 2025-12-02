@@ -1,12 +1,11 @@
 import streamlit as st
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from database import Professor, Industry, Sector, professor_industries, professor_sectors
+from database import Professor, Industry, Sector, professor_industries, professor_sectors, init_db
 
 # Database connection
 def get_db_session():
-    engine = create_engine('sqlite:///data/faculty.db')
-    Session = sessionmaker(bind=engine)
+    Session = init_db()
     return Session()
 
 st.set_page_config(page_title="IESE Faculty Explorer", layout="wide")
