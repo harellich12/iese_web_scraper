@@ -7,12 +7,16 @@ from database import Professor, Industry, Sector, professor_industries, professo
 def fix_db_paths(session):
     """Fixes Windows paths in database to be cross-platform."""
     try:
-        # Find records with backslashes
-        professors = session.query(Professor).filter(Professor.image_url.like('%\\%')).all()
-        if professors:
-            print(f"Migrating {len(professors)} records to forward slashes...")
-            for p in professors:
+        # Check ALL professors with images, not just relying on LIKE which can be finicky
+        professors = session.query(Professor).filter(Professor.image_url != None).all()
+        count = 0
+        for p in professors:
+            if "\\" in p.image_url:
                 p.image_url = p.image_url.replace("\\", "/")
+                count += 1
+        
+        if count > 0:
+            print(f"Migrating {count} records to forward slashes...")
             session.commit()
             print("Migration complete.")
     except Exception as e:
@@ -83,7 +87,9 @@ for idx, prof in enumerate(professors):
     with cols[idx % 3]:
         with st.container(border=True):
             if prof.image_url:
-                st.image(prof.image_url, width=150)
+                # Force normalize path just in case DB is still wrong
+                image_path = prof.image_url.replace("\\", "/")
+                st.image(image_path, width=150)
             st.subheader(prof.name)
             st.caption(prof.title)
             st.write(f"**Dept:** {prof.department}")
