@@ -30,7 +30,7 @@ def get_db_session():
 
 st.set_page_config(page_title="IESE Faculty Explorer", layout="wide")
 
-st.title("IESE Faculty Explorer")
+st.title("IESE Faculty Explorer v1.1 (Fixes)")
 
 session = get_db_session()
 
