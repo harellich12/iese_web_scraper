@@ -6,10 +6,6 @@ venv/
 .DS_Store
 .vscode/
 
-# Database
-*.db
-*.bak
-
 # Debug files
 debug_*.py
 debug_*.html

@@ -71,11 +71,16 @@ def analyze_bio_for_industries(bio_text):
             if "404" in str(e) and "not found" in str(e):
                 logging.error(f"Model not found (404): {e}. Stopping retries.")
                 return {"industries": ["General Management"], "sectors": []}
+            
+            wait_time = (2 ** attempt) * 15  # 15s, 30s, 60s
+            if "429" in str(e):
+                logging.warning(f"Rate limit hit (429). Waiting {wait_time}s...")
+            else:
+                logging.warning(f"Attempt {attempt+1} failed for LLM analysis: {e}. Waiting {wait_time}s...")
                 
-            logging.warning(f"Attempt {attempt+1} failed for LLM analysis: {e}")
             if attempt < 2:
                 import time
-                time.sleep(2)
+                time.sleep(wait_time)
             else:
                 logging.error(f"All attempts failed for LLM analysis. Returning default.")
                 return {"industries": ["General Management"], "sectors": []}
