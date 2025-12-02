@@ -1,0 +1,99 @@
+﻿Starting scrape...
+python : 2025-12-02 09:37:06,790 - INFO - Scraping list page: https://www.iese.edu/search/professors/
+At line:1 char:1
++ python src/scraper.py 40 > scrape_log.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (2025-12-02 09:3...rch/professors/:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+2025-12-02 09:37:08,020 - INFO - Found 20 profiles on page 1
+2025-12-02 09:37:09,024 - INFO - Scraping list page: https://www.iese.edu/search/professors/page/2/
+2025-12-02 09:37:10,131 - INFO - Found 20 profiles on page 2
+2025-12-02 09:37:10,131 - INFO - No new professors found on this page (all duplicates). Stopping.
+Total unique professors found: 20
+Limiting to first 40 profiles for processing.
+2025-12-02 09:37:10,131 - INFO - Processing 1/20: https://www.iese.edu/faculty-research/faculty/romain-boulongne/
+2025-12-02 09:37:10,131 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/romain-boulongne/
+2025-12-02 09:37:11,244 - INFO - Extracted: Name=Romain Boulongne, Title=, Dept=, BioLen=1985
+2025-12-02 09:37:11,250 - INFO - Professor already exists: Romain Boulongne
+2025-12-02 09:37:11,351 - INFO - Processing 2/20: https://www.iese.edu/faculty-research/faculty/pascual-berrone/
+2025-12-02 09:37:11,352 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/pascual-berrone/
+2025-12-02 09:37:12,429 - INFO - Extracted: Name=Pascual Berrone, Title=, Dept=, BioLen=4359
+2025-12-02 09:37:12,430 - INFO - Professor already exists: Pascual Berrone
+2025-12-02 09:37:12,530 - INFO - Processing 3/20: https://www.iese.edu/faculty-research/faculty/mario-capizzani/
+2025-12-02 09:37:12,530 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/mario-capizzani/
+2025-12-02 09:37:13,582 - INFO - Extracted: Name=Mario Capizzani, Title=, Dept=, BioLen=2089
+2025-12-02 09:37:13,583 - INFO - Professor already exists: Mario Capizzani
+2025-12-02 09:37:13,683 - INFO - Processing 4/20: 
+https://www.iese.edu/faculty-research/faculty/veronica-roberta-cappelli/
+2025-12-02 09:37:13,683 - INFO - Scraping profile: 
+https://www.iese.edu/faculty-research/faculty/veronica-roberta-cappelli/
+2025-12-02 09:37:14,655 - INFO - Extracted: Name=Veronica Roberta Cappelli, Title=, Dept=, BioLen=1470
+2025-12-02 09:37:14,656 - INFO - Professor already exists: Veronica Roberta Cappelli
+2025-12-02 09:37:14,756 - INFO - Processing 5/20: https://www.iese.edu/faculty-research/faculty/eduard-calvo/
+2025-12-02 09:37:14,756 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/eduard-calvo/
+2025-12-02 09:37:15,785 - INFO - Extracted: Name=Eduard Calvo, Title=, Dept=, BioLen=2184
+2025-12-02 09:37:15,786 - INFO - Professor already exists: Eduard Calvo
+2025-12-02 09:37:15,887 - INFO - Processing 6/20: 
+https://www.iese.edu/faculty-research/faculty/javier-aguirreamalloa-arizaga/
+2025-12-02 09:37:15,887 - INFO - Scraping profile: 
+https://www.iese.edu/faculty-research/faculty/javier-aguirreamalloa-arizaga/
+2025-12-02 09:37:16,949 - INFO - Extracted: Name=Javier Aguirreamalloa, Title=, Dept=, BioLen=1264
+2025-12-02 09:37:16,950 - INFO - Professor already exists: Javier Aguirreamalloa
+2025-12-02 09:37:17,050 - INFO - Processing 7/20: https://www.iese.edu/faculty-research/faculty/natalie-burford/
+2025-12-02 09:37:17,050 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/natalie-burford/
+2025-12-02 09:37:18,070 - INFO - Extracted: Name=Natalie Burford, Title=, Dept=, BioLen=1671
+2025-12-02 09:37:18,070 - INFO - Professor already exists: Natalie Burford
+2025-12-02 09:37:18,172 - INFO - Processing 8/20: https://www.iese.edu/faculty-research/faculty/ricardo-calleja/
+2025-12-02 09:37:18,172 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/ricardo-calleja/
+2025-12-02 09:37:19,234 - INFO - Extracted: Name=Ricardo Calleja, Title=, Dept=, BioLen=2125
+2025-12-02 09:37:19,235 - INFO - Professor already exists: Ricardo Calleja
+2025-12-02 09:37:19,335 - INFO - Processing 9/20: https://www.iese.edu/faculty-research/faculty/pietro-bonetti/
+2025-12-02 09:37:19,335 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/pietro-bonetti/
+2025-12-02 09:37:20,379 - INFO - Extracted: Name=Pietro Bonetti, Title=, Dept=, BioLen=1110
+2025-12-02 09:37:20,380 - INFO - Professor already exists: Pietro Bonetti
+2025-12-02 09:37:20,481 - INFO - Processing 10/20: https://www.iese.edu/faculty-research/faculty/diego-aparicio/
+2025-12-02 09:37:20,481 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/diego-aparicio/
+2025-12-02 09:37:21,511 - INFO - Extracted: Name=Diego Aparicio, Title=, Dept=, BioLen=1228
+2025-12-02 09:37:21,512 - INFO - Professor already exists: Diego Aparicio
+2025-12-02 09:37:21,613 - INFO - Processing 11/20: https://www.iese.edu/faculty-research/faculty/miguel-angel-arino/
+2025-12-02 09:37:21,613 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/miguel-angel-arino/
+2025-12-02 09:37:22,675 - INFO - Extracted: Name=Miguel Angel Ari±o, Title=, Dept=, BioLen=1127
+2025-12-02 09:37:22,675 - INFO - Professor already exists: Miguel Angel Ari±o
+2025-12-02 09:37:22,777 - INFO - Processing 12/20: https://www.iese.edu/faculty-research/faculty/africa-arino/
+2025-12-02 09:37:22,777 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/africa-arino/
+2025-12-02 09:37:24,001 - INFO - Extracted: Name=Africa Ari±o, Title=, Dept=, BioLen=2975
+2025-12-02 09:37:24,002 - INFO - Professor already exists: Africa Ari±o
+2025-12-02 09:37:24,103 - INFO - Processing 13/20: https://www.iese.edu/faculty-research/faculty/miguel-anton/
+2025-12-02 09:37:24,103 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/miguel-anton/
+2025-12-02 09:37:25,135 - INFO - Extracted: Name=Miguel Ant≤n, Title=, Dept=, BioLen=2113
+2025-12-02 09:37:25,135 - INFO - Professor already exists: Miguel Ant≤n
+2025-12-02 09:37:25,236 - INFO - Processing 14/20: https://www.iese.edu/faculty-research/faculty/jordi-canals/
+2025-12-02 09:37:25,236 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/jordi-canals/
+2025-12-02 09:37:26,349 - INFO - Extracted: Name=Jordi Canals, Title=, Dept=, BioLen=2046
+2025-12-02 09:37:26,349 - INFO - Professor already exists: Jordi Canals
+2025-12-02 09:37:26,450 - INFO - Processing 15/20: https://www.iese.edu/faculty-research/faculty/tawfiq-alashoor/
+2025-12-02 09:37:26,450 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/tawfiq-alashoor/
+2025-12-02 09:37:27,516 - INFO - Extracted: Name=Tawfiq Alashoor, Title=, Dept=, BioLen=2558
+2025-12-02 09:37:27,517 - INFO - Professor already exists: Tawfiq Alashoor
+2025-12-02 09:37:27,618 - INFO - Processing 16/20: https://www.iese.edu/faculty-research/faculty/marc-badia/
+2025-12-02 09:37:27,618 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/marc-badia/
+2025-12-02 09:37:28,696 - INFO - Extracted: Name=Marc Badia, Title=, Dept=, BioLen=1229
+2025-12-02 09:37:28,697 - INFO - Professor already exists: Marc Badia
+2025-12-02 09:37:28,798 - INFO - Processing 17/20: https://www.iese.edu/faculty-research/faculty/adrian-caldart/
+2025-12-02 09:37:28,798 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/adrian-caldart/
+2025-12-02 09:37:29,836 - INFO - Extracted: Name=Adrian Caldart, Title=, Dept=, BioLen=1862
+2025-12-02 09:37:29,837 - INFO - Professor already exists: Adrian Caldart
+2025-12-02 09:37:29,938 - INFO - Processing 18/20: https://www.iese.edu/faculty-research/faculty/jaume-armengou/
+2025-12-02 09:37:29,938 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/jaume-armengou/
+2025-12-02 09:37:31,053 - INFO - Extracted: Name=Jaume Armengou, Title=, Dept=, BioLen=2077
+2025-12-02 09:37:31,054 - INFO - Professor already exists: Jaume Armengou
+2025-12-02 09:37:31,155 - INFO - Processing 19/20: https://www.iese.edu/faculty-research/faculty/john-almandoz/
+2025-12-02 09:37:31,155 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/john-almandoz/
+2025-12-02 09:37:32,208 - INFO - Extracted: Name=John Almandoz, Title=, Dept=, BioLen=1893
+2025-12-02 09:37:32,209 - INFO - Professor already exists: John Almandoz
+2025-12-02 09:37:32,309 - INFO - Processing 20/20: https://www.iese.edu/faculty-research/faculty/sebastien-brion/
+2025-12-02 09:37:32,309 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/sebastien-brion/
+2025-12-02 09:37:33,454 - INFO - Extracted: Name=Sebastien Brion, Title=, Dept=, BioLen=2662
+2025-12-02 09:37:33,455 - INFO - Professor already exists: Sebastien Brion
+Scraping complete.

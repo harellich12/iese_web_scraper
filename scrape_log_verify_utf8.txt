@@ -1,0 +1,100 @@
+﻿Starting scrape...
+python : 2025-12-02 09:57:13,561 - INFO - Scraping list page: https://www.iese.edu/search/professors/
+At line:1 char:1
++ python src/scraper.py 40 > scrape_log_verify.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (2025-12-02 09:5...rch/professors/:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+2025-12-02 09:57:14,780 - INFO - Found 20 profiles on page 1
+2025-12-02 09:57:15,783 - INFO - Scraping list page: https://www.iese.edu/search/professors/2/
+2025-12-02 09:57:16,835 - INFO - Found 20 profiles on page 2
+Total unique professors found: 40
+Limiting to first 40 profiles for processing.
+2025-12-02 09:57:16,836 - INFO - Processing 1/40: https://www.iese.edu/faculty-research/faculty/clara-carrera/
+2025-12-02 09:57:16,836 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/clara-carrera/
+2025-12-02 09:57:17,833 - INFO - Extracted: Name=Clara Carrera, Title=, Dept=, BioLen=1639
+2025-12-02 09:57:22,580 - INFO - Inferred Industries: ['Technology', 'Logistics', 'Energy', 'Consulting', 
+'Manufacturing', 'Sustainability'], Sectors: ['Operations Management', 'Clean Technology', 'Consumer Electronics', 
+'Supply Chain Management', 'Circular Economy', 'Civil Engineering', 'Management Consulting', 'E-commerce']
+C:\Users\Harel-PC\OneDrive - IESE Business School\Desktop\AI Tests\Web Scraper\src\scraper.py:213: SAWarning: Object 
+of type <Professor> not in session, add operation along 'Industry.professors' won't proceed (This warning originated 
+from the Session 'autoflush' process, which was invoked automatically in response to a user-initiated operation. 
+Consider using ``no_autoflush`` context manager if this warning happened while initializing objects.)
+  industry = session.query(Industry).filter_by(name=ind_name).first()
+C:\Users\Harel-PC\OneDrive - IESE Business School\Desktop\AI Tests\Web Scraper\src\scraper.py:221: SAWarning: Object 
+of type <Professor> not in session, add operation along 'Industry.professors' won't proceed (This warning originated 
+from the Session 'autoflush' process, which was invoked automatically in response to a user-initiated operation. 
+Consider using ``no_autoflush`` context manager if this warning happened while initializing objects.)
+  sector = session.query(Sector).filter_by(name=sec_name).first()
+C:\Users\Harel-PC\OneDrive - IESE Business School\Desktop\AI Tests\Web Scraper\src\scraper.py:221: SAWarning: Object 
+of type <Professor> not in session, add operation along 'Sector.professors' won't proceed (This warning originated 
+from the Session 'autoflush' process, which was invoked automatically in response to a user-initiated operation. 
+Consider using ``no_autoflush`` context manager if this warning happened while initializing objects.)
+  sector = session.query(Sector).filter_by(name=sec_name).first()
+2025-12-02 09:57:22,609 - INFO - Saved: Clara Carrera
+2025-12-02 09:57:22,709 - INFO - Processing 2/40: https://www.iese.edu/faculty-research/faculty/luis-ferrandiz/
+2025-12-02 09:57:22,709 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/luis-ferrandiz/
+2025-12-02 09:57:23,770 - INFO - Extracted: Name=Luis Ferrßndiz, Title=, Dept=, BioLen=1480
+2025-12-02 09:57:28,793 - INFO - Inferred Industries: ['Technology', 'Consulting', 'Finance', 'Retail', 'Energy'], 
+Sectors: ['Digital Transformation', 'Digital Marketing', 'Artificial Intelligence', 'Internet Services', 
+'Telecommunications', 'Banking', 'Insurance', 'Travel']
+2025-12-02 09:57:28,813 - INFO - Saved: Luis Ferrßndiz
+2025-12-02 09:57:28,914 - INFO - Processing 3/40: https://www.iese.edu/faculty-research/faculty/tawfiq-alashoor/
+2025-12-02 09:57:28,914 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/tawfiq-alashoor/
+2025-12-02 09:57:29,993 - INFO - Extracted: Name=Tawfiq Alashoor, Title=, Dept=, BioLen=2558
+2025-12-02 09:57:29,993 - INFO - Professor already exists: Tawfiq Alashoor
+2025-12-02 09:57:30,095 - INFO - Processing 4/40: https://www.iese.edu/faculty-research/faculty/jaume-armengou/
+2025-12-02 09:57:30,095 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/jaume-armengou/
+2025-12-02 09:57:31,185 - INFO - Extracted: Name=Jaume Armengou, Title=, Dept=, BioLen=2077
+2025-12-02 09:57:31,186 - INFO - Professor already exists: Jaume Armengou
+2025-12-02 09:57:31,286 - INFO - Processing 5/40: https://www.iese.edu/faculty-research/faculty/romain-boulongne/
+2025-12-02 09:57:31,286 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/romain-boulongne/
+2025-12-02 09:57:32,333 - INFO - Extracted: Name=Romain Boulongne, Title=, Dept=, BioLen=1985
+2025-12-02 09:57:32,334 - INFO - Professor already exists: Romain Boulongne
+2025-12-02 09:57:32,434 - INFO - Processing 6/40: https://www.iese.edu/faculty-research/faculty/john-almandoz/
+2025-12-02 09:57:32,434 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/john-almandoz/
+2025-12-02 09:57:33,485 - INFO - Extracted: Name=John Almandoz, Title=, Dept=, BioLen=1893
+2025-12-02 09:57:33,486 - INFO - Professor already exists: John Almandoz
+2025-12-02 09:57:33,587 - INFO - Processing 7/40: https://www.iese.edu/faculty-research/faculty/javier-diaz-gimenez/
+2025-12-02 09:57:33,587 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/javier-diaz-gimenez/
+2025-12-02 09:57:34,635 - INFO - Extracted: Name=Javier Dφaz GimΘnez, Title=, Dept=, BioLen=985
+2025-12-02 09:57:39,283 - INFO - Inferred Industries: ['Education', 'Finance', 'Government/Public Policy'], Sectors: 
+['Higher Education', 'Pension Systems', 'Economic Consulting', 'Fiscal Policy']
+2025-12-02 09:57:39,301 - INFO - Saved: Javier Dφaz GimΘnez
+2025-12-02 09:57:39,402 - INFO - Processing 8/40: https://www.iese.edu/faculty-research/faculty/javier-estrada/
+2025-12-02 09:57:39,402 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/javier-estrada/
+2025-12-02 09:57:40,515 - INFO - Extracted: Name=Javier Estrada, Title=, Dept=, BioLen=2667
+2025-12-02 09:57:43,241 - INFO - Inferred Industries: ['Financial Services', 'Consulting'], Sectors: ['Wealth 
+Management', 'Portfolio Management', 'Asset Management', 'Financial Advisory', 'Emerging Markets Finance']
+2025-12-02 09:57:43,255 - INFO - Saved: Javier Estrada
+2025-12-02 09:57:43,356 - INFO - Processing 9/40: https://www.iese.edu/faculty-research/faculty/fabrizio-ferraro/
+2025-12-02 09:57:43,356 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/fabrizio-ferraro/
+2025-12-02 09:57:44,420 - INFO - Extracted: Name=Fabrizio Ferraro, Title=, Dept=, BioLen=2034
+2025-12-02 09:57:49,484 - INFO - Inferred Industries: ['Finance', 'Luxury Goods', 'Consumer Goods', 'Technology', 
+'Energy', 'Telecommunications'], Sectors: ['Impact Investing', 'Responsible Investing', 'Fashion', 'Banking', 
+'Enterprise Software', 'Electric Utilities']
+2025-12-02 09:57:49,530 - INFO - Saved: Fabrizio Ferraro
+2025-12-02 09:57:49,630 - INFO - Processing 10/40: 
+https://www.iese.edu/faculty-research/faculty/veronica-roberta-cappelli/
+2025-12-02 09:57:49,630 - INFO - Scraping profile: 
+https://www.iese.edu/faculty-research/faculty/veronica-roberta-cappelli/
+2025-12-02 09:57:50,635 - INFO - Extracted: Name=Veronica Roberta Cappelli, Title=, Dept=, BioLen=1470
+2025-12-02 09:57:50,636 - INFO - Professor already exists: Veronica Roberta Cappelli
+2025-12-02 09:57:50,737 - INFO - Processing 11/40: https://www.iese.edu/faculty-research/faculty/miguel-angel-arino/
+2025-12-02 09:57:50,737 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/miguel-angel-arino/
+2025-12-02 09:57:51,824 - INFO - Extracted: Name=Miguel Angel Ari±o, Title=, Dept=, BioLen=1127
+2025-12-02 09:57:51,825 - INFO - Professor already exists: Miguel Angel Ari±o
+2025-12-02 09:57:51,926 - INFO - Processing 12/40: https://www.iese.edu/faculty-research/faculty/africa-arino/
+2025-12-02 09:57:51,926 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/africa-arino/
+2025-12-02 09:57:52,991 - INFO - Extracted: Name=Africa Ari±o, Title=, Dept=, BioLen=2975
+2025-12-02 09:57:52,993 - INFO - Professor already exists: Africa Ari±o
+2025-12-02 09:57:53,093 - INFO - Processing 13/40: https://www.iese.edu/faculty-research/faculty/mailys-george/
+2025-12-02 09:57:53,093 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/mailys-george/
+2025-12-02 09:57:54,108 - INFO - Extracted: Name=Ma∩lys George, Title=, Dept=, BioLen=1466
+2025-12-02 09:57:57,404 - INFO - Inferred Industries: ['Education', 'Human Resources'], Sectors: ['Organizational 
+Behavior', 'Higher Education', 'Diversity and Inclusion', 'Workplace Well-being']
+2025-12-02 09:57:57,419 - INFO - Saved: Ma∩lys George
+2025-12-02 09:57:57,520 - INFO - Processing 14/40: https://www.iese.edu/faculty-research/faculty/rafael-de-santiago/
+2025-12-02 09:57:57,520 - INFO - Scraping profile: https://www.iese.edu/faculty-research/faculty/rafael-de-santiago/
+2025-12-02 09:57:58,640 - INFO - Extracted: Name=Rafael de Santiago, Title=, Dept=, BioLen=1833
