@@ -15,6 +15,12 @@ professor_sectors = Table('professor_sectors', Base.metadata,
     Column('sector_id', Integer, ForeignKey('sectors.id'), primary_key=True)
 )
 
+# Association table for Professor <-> Area of Interest (Many-to-Many)
+professor_areas_of_interest = Table('professor_areas_of_interest', Base.metadata,
+    Column('professor_id', Integer, ForeignKey('professors.id'), primary_key=True),
+    Column('area_of_interest_id', Integer, ForeignKey('areas_of_interest.id'), primary_key=True)
+)
+
 class Professor(Base):
     __tablename__ = 'professors'
 
@@ -28,6 +34,7 @@ class Professor(Base):
     
     industries = relationship('Industry', secondary=professor_industries, back_populates='professors')
     sectors = relationship('Sector', secondary=professor_sectors, back_populates='professors')
+    areas_of_interest = relationship('AreaOfInterest', secondary=professor_areas_of_interest, back_populates='professors')
 
     def __repr__(self):
         return f"<Professor(name='{self.name}', department='{self.department}')>"
@@ -53,6 +60,17 @@ class Sector(Base):
 
     def __repr__(self):
         return f"<Sector(name='{self.name}')>"
+
+class AreaOfInterest(Base):
+    __tablename__ = 'areas_of_interest'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, unique=True, nullable=False)
+    
+    professors = relationship('Professor', secondary=professor_areas_of_interest, back_populates='areas_of_interest')
+
+    def __repr__(self):
+        return f"<AreaOfInterest(name='{self.name}')>"
 
 def init_db(db_path='sqlite:///data/faculty_v2.db'):
     # Ensure directory exists if using sqlite file

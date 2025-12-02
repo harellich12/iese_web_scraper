@@ -283,7 +283,7 @@ def scrape_professor_details(url):
 
     return data
 
-from database import init_db, Professor, Industry, Sector
+from database import init_db, Professor, Industry, Sector, AreaOfInterest
 from analyzer import analyze_bio_for_industries
 
 # Initialize DB Session
@@ -294,33 +294,21 @@ def save_professor(data):
     """Saves professor data and industries to the database."""
     try:
         # Check if exists
-        existing = session.query(Professor).filter_by(url=data['url']).first()
-        if existing:
-            # Update existing record if needed
-            updated = False
-            if data['image_url'] and existing.image_url != data['image_url']:
-                existing.image_url = data['image_url']
-                updated = True
-            
-            if data['department'] and not existing.department:
-                existing.department = data['department']
-                updated = True
-                
-            if updated:
-                session.commit()
-                logging.info(f"Updated details for: {data['name']}")
-            else:
-                logging.info(f"Professor already exists: {data['name']}")
-            return
+        prof = session.query(Professor).filter_by(url=data['url']).first()
+        
+        if not prof:
+            prof = Professor(url=data['url'])
+            session.add(prof)
+            logging.info(f"Creating new professor: {data['name']}")
+        else:
+            logging.info(f"Updating existing professor: {data['name']}")
 
-        prof = Professor(
-            name=data['name'],
-            url=data['url'],
-            title=data['title'],
-            department=data['department'],
-            bio=data['bio'],
-            image_url=data['image_url']
-        )
+        # Update fields
+        prof.name = data['name']
+        prof.title = data['title']
+        prof.department = data['department']
+        prof.bio = data['bio']
+        prof.image_url = data['image_url']
         
         # Analyze Industries & Sectors
         if data['bio']:
@@ -328,8 +316,14 @@ def save_professor(data):
             
             industry_names = analysis_result.get("industries", [])
             sector_names = analysis_result.get("sectors", [])
+            area_names = analysis_result.get("areas_of_interest", [])
             
-            logging.info(f"Inferred Industries: {industry_names}, Sectors: {sector_names}")
+            logging.info(f"Inferred Industries: {industry_names}, Sectors: {sector_names}, Areas: {area_names}")
+            
+            # Clear existing associations to avoid duplicates/stale data
+            prof.industries = []
+            prof.sectors = []
+            prof.areas_of_interest = []
             
             # Save Industries
             for ind_name in industry_names:
@@ -337,7 +331,8 @@ def save_professor(data):
                 if not industry:
                     industry = Industry(name=ind_name)
                     session.add(industry)
-                prof.industries.append(industry)
+                if industry not in prof.industries:
+                    prof.industries.append(industry)
                 
             # Save Sectors
             for sec_name in sector_names:
@@ -345,9 +340,18 @@ def save_professor(data):
                 if not sector:
                     sector = Sector(name=sec_name)
                     session.add(sector)
-                prof.sectors.append(sector)
+                if sector not in prof.sectors:
+                    prof.sectors.append(sector)
+
+            # Save Areas of Interest
+            for area_name in area_names:
+                area = session.query(AreaOfInterest).filter_by(name=area_name).first()
+                if not area:
+                    area = AreaOfInterest(name=area_name)
+                    session.add(area)
+                if area not in prof.areas_of_interest:
+                    prof.areas_of_interest.append(area)
         
-        session.add(prof)
         session.commit()
         logging.info(f"Saved: {prof.name}")
         
