@@ -4,9 +4,25 @@ from sqlalchemy import create_engine
 from database import Professor, Industry, Sector, professor_industries, professor_sectors, init_db
 
 # Database connection
+def fix_db_paths(session):
+    """Fixes Windows paths in database to be cross-platform."""
+    try:
+        # Find records with backslashes
+        professors = session.query(Professor).filter(Professor.image_url.like('%\\%')).all()
+        if professors:
+            print(f"Migrating {len(professors)} records to forward slashes...")
+            for p in professors:
+                p.image_url = p.image_url.replace("\\", "/")
+            session.commit()
+            print("Migration complete.")
+    except Exception as e:
+        print(f"Error migrating DB: {e}")
+
 def get_db_session():
     Session = init_db()
-    return Session()
+    session = Session()
+    fix_db_paths(session)
+    return session
 
 st.set_page_config(page_title="IESE Faculty Explorer", layout="wide")
 
@@ -31,6 +47,19 @@ selected_sectors = st.sidebar.multiselect("Select Sectors", sector_names)
 all_departments = session.query(Professor.department).distinct().all()
 dept_names = [d[0] for d in all_departments if d[0]]
 selected_depts = st.sidebar.multiselect("Select Departments", dept_names)
+
+# Debug: File System Check
+with st.sidebar.expander("Debug: File System"):
+    import os
+    if os.path.exists("data/images"):
+        files = os.listdir("data/images")
+        st.write(f"Found {len(files)} images in data/images")
+        if files:
+            st.write(f"Sample: {files[:3]}")
+    else:
+        st.error("data/images directory NOT found!")
+    
+    st.write(f"CWD: {os.getcwd()}")
 
 # Query
 query = session.query(Professor)
